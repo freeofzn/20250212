@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo 앱</title>
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 기본 스타일 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* 컨테이너 */
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Todo 리스트 스타일 */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        li.completed {
+            text-decoration: line-through;
+            color: #bbb;
+        }
+
+        button.remove {
+            background-color: #f44336;
+        }
+
+        button.remove:hover {
+            background-color: #e53935;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TD</h1>
+        <input type="text" id="todo-input" placeholder="할 일을 입력하세요" />
+        <button id="add-btn">추가</button>
+        <ul id="todo-list"></ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const todoInput = document.getElementById("todo-input");
+            const addBtn = document.getElementById("add-btn");
+            const todoList = document.getElementById("todo-list");
+
+            // 할 일 추가
+            addBtn.addEventListener("click", function() {
+                const todoText = todoInput.value.trim();
+                
+                if (todoText !== "") {
+                    const todoItem = document.createElement("li");
+                    todoItem.innerHTML = `
+                        <span class="todo-text">${todoText}</span>
+                        <button class="remove">삭제</button>
+                    `;
+                    
+                    // 완료 버튼 추가
+                    todoItem.addEventListener("click", function() {
+                        todoItem.classList.toggle("completed");
+                    });
+
+                    // 삭제 버튼 기능
+                    const removeBtn = todoItem.querySelector(".remove");
+                    removeBtn.addEventListener("click", function(event) {
+                        event.stopPropagation(); // 클릭이 완료로 가는 것을 막기 위해
+                        todoItem.remove();
+                    });
+
+                    // todo 리스트에 아이템 추가
+                    todoList.appendChild(todoItem);
+                    todoInput.value = ""; // 입력 필드 비우기
+                    todoInput.focus();
+                }
+            });
+
+            // 엔터키로 추가 기능
+            todoInput.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    addBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
